@@ -1,4 +1,6 @@
 import { useForm } from 'react-hook-form'
+import { useState } from 'react'
+import { SummaryDataForm } from './SummaryDataForm'
 
 export const PersonalDataForm = () => {
    const {
@@ -8,14 +10,19 @@ export const PersonalDataForm = () => {
       formState: { errors },
    } = useForm()
 
+   const [userData, setUserData] = useState(null)
+
    const watchExperience = watch('experience', false)
    console.log('errors:', errors)
 
    const onSubmit = data => {
       console.log(data)
+      setUserData(data)
    }
 
-   return (
+   return userData ? (
+      <SummaryDataForm userData={userData} />
+   ) : (
       <>
          <form id="personalDataForm" onSubmit={handleSubmit(onSubmit)}>
             <p>Dane osobowe</p>
