@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form'
+import { useForm, useFieldArray } from 'react-hook-form'
 import { useState } from 'react'
 import { SummaryDataForm } from './SummaryDataForm'
 
@@ -7,8 +7,22 @@ export const PersonalDataForm = () => {
       register,
       handleSubmit,
       watch,
+      control,
       formState: { errors },
-   } = useForm()
+   } = useForm({
+      defaultValues: {
+         experiences: [],
+      },
+   })
+
+   const {
+      fields: exp,
+      append,
+      remove,
+   } = useFieldArray({
+      control,
+      name: 'experiences',
+   })
 
    const [userData, setUserData] = useState(null)
 
@@ -118,16 +132,40 @@ export const PersonalDataForm = () => {
                      <option value="CSS">CSS</option>
                      <option value="NextJS">NextJS</option>
                   </select>
-                  <select id="experienceRating" name="experienceRating" {...register('experienceRating')}>
+                  <select id="experienceLevel" name="experienceLevel" {...register('experienceLevel')}>
                      <option value="1">1</option>
                      <option value="2">2</option>
                      <option value="3">3</option>
                      <option value="4">4</option>
                      <option value="5">5</option>
                   </select>
-                  <button type="button" id="addExperience">
+                  <button
+                     type="button"
+                     id="addExperience"
+                     onClick={() => {
+                        const technology = watch('technologiesExperience')
+                        const level = watch('experienceLevel')
+                        if (technology && level) {
+                           append({ technology, level })
+                        }
+                     }}
+                  >
                      Dodaj Doświadczenie
                   </button>
+
+                  <ul>
+                     {exp.map((exp, index) => (
+                        <li key={exp.id}>
+                           {exp.technology} - {exp.level}
+                           <button type="button" onClick={() => remove(index)}>
+                              Usuń
+                           </button>
+                        </li>
+                     ))}
+                  </ul>
+                  {errors.experiences === 0 && (
+                     <p>Gdy zaznaczono doświadczenie w programowaniu, lista doświadczeń nie może być pusta.</p>
+                  )}
                </div>
             )}
             <button type="submit">Wyślij zgłoszenie</button>
