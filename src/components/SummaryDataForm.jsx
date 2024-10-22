@@ -1,5 +1,5 @@
 export const SummaryDataForm = ({ userData }) => {
-   const { firstName, lastName, email, phone, experience, learningMode, technologies, cv } = userData
+   const { firstName, lastName, email, phone, experiences, learningMode, technologies, cv } = userData
    return (
       <>
          <h1>Dane z Formularza</h1>
@@ -13,9 +13,15 @@ export const SummaryDataForm = ({ userData }) => {
             </div>
             <div>
                <h2>Doświadczenie w programowaniu:</h2>
-               {experience.length > 0 ? (
+               {experiences.length > 0 ? (
                   <ul>
-                     // TODO: Get experience Technology / Level
+                     {experiences.map(exp => {
+                        return (
+                           <li key={`${exp.technology}${exp.level}`}>
+                              Technologia: {exp.technology} / poziom: {exp.level}
+                           </li>
+                        )
+                     })}
                   </ul>
                ) : (
                   <li>Brak doświadczenia</li>
