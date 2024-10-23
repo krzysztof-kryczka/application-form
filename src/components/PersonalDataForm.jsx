@@ -1,3 +1,4 @@
+import React from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { useState } from 'react'
 import { SummaryDataForm } from './SummaryDataForm'
@@ -37,6 +38,8 @@ export const PersonalDataForm = () => {
       setUserData(data)
    }
 
+   const learningModes = schemaForm._def.schema.shape.learningMode.options // Extract the enum values
+
    return userData ? (
       <SummaryDataForm userData={userData} />
    ) : (
@@ -52,12 +55,16 @@ export const PersonalDataForm = () => {
             <input type="tel" id="phone" name="phone" placeholder="Numer telefonu" {...register('phone')} />
             {errors?.phone && <p>{errors.phone.message}</p>}
             <p>Preferencje kursu</p>
+
             <label htmlFor="learningMode">Wybierz Formę nauki:</label>
-            <input type="radio" id="offline" name="learningMode" value="offline" {...register('learningMode')} />
-            <label htmlFor="offline">Stacjonarnie</label>
-            <input type="radio" id="online" name="learningMode" value="online" {...register('learningMode')} />
-            <label htmlFor="online">Online</label>
+            {learningModes.map(mode => (
+               <React.Fragment key={mode}>
+                  <input type="radio" id={mode} name="learningMode" value={mode} {...register('learningMode')} />
+                  <label htmlFor={mode}>{mode === 'offline' ? 'Stacjonarna' : 'Online'}</label>
+               </React.Fragment>
+            ))}
             {errors?.learningMode && <p>{errors.learningMode.message}</p>}
+
             <label htmlFor="technologies">Preferowane technologie:</label>
             <select id="technologies" name="technologies" {...register('technologies')} multiple>
                <option value="React">React</option>
