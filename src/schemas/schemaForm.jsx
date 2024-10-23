@@ -9,7 +9,9 @@ export const schemaForm = z
       learningMode: z.enum(['offline', 'online'], {
          errorMap: () => ({ message: 'Proszę wybrać formę nauki.' }),
       }),
-      technologies: z.array(z.string()).min(1, 'Proszę wybrać co najmniej jedną technologię'),
+      technologies: z
+         .array(z.enum(['React', 'NodeJS', 'HTML', 'CSS', 'NextJS']))
+         .min(1, 'Proszę wybrać co najmniej jedną technologię'),
       cv: z.any().superRefine((file, ctx) => {
          if (!file || file.length === 0) {
             ctx.addIssue({

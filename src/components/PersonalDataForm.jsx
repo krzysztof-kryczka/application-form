@@ -39,6 +39,7 @@ export const PersonalDataForm = () => {
    }
 
    const learningModes = schemaForm._def.schema.shape.learningMode.options // Extract the enum values
+   const technologyOptions = schemaForm._def.schema.shape.technologies.element.options // Extract the array values
 
    return userData ? (
       <SummaryDataForm userData={userData} />
@@ -46,6 +47,7 @@ export const PersonalDataForm = () => {
       <>
          <form id="personalDataForm" onSubmit={handleSubmit(onSubmit)}>
             <p>Dane osobowe</p>
+
             <input type="text" id="firstName" name="firstName" placeholder="Imię" {...register('firstName')} />
             {errors?.firstName && <p>{errors.firstName.message}</p>}
             <input type="text" id="lastName" name="lastName" placeholder="Nazwisko" {...register('lastName')} />
@@ -54,6 +56,7 @@ export const PersonalDataForm = () => {
             {errors?.email && <p>{errors.email.message}</p>}
             <input type="tel" id="phone" name="phone" placeholder="Numer telefonu" {...register('phone')} />
             {errors?.phone && <p>{errors.phone.message}</p>}
+
             <p>Preferencje kursu</p>
 
             <label htmlFor="learningMode">Wybierz Formę nauki:</label>
@@ -67,13 +70,14 @@ export const PersonalDataForm = () => {
 
             <label htmlFor="technologies">Preferowane technologie:</label>
             <select id="technologies" name="technologies" {...register('technologies')} multiple>
-               <option value="React">React</option>
-               <option value="NodeJS">NodeJS</option>
-               <option value="HTML">HTML</option>
-               <option value="CSS">CSS</option>
-               <option value="NextJS">NextJS</option>
+               {technologyOptions.map(tech => (
+                  <option key={tech} value={tech}>
+                     {tech}
+                  </option>
+               ))}
             </select>
             {errors?.technologies && <p>{errors.technologies.message}</p>}
+
             <p>Załącz swoje CV (JPEG lub PNG):</p>
             <input type="file" id="cv" name="cv" accept="image/jpeg, image/png" {...register('cv')}></input>
             {errors?.cv && <p>{errors.cv.message}</p>}
