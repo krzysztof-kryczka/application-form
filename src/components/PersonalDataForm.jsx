@@ -40,6 +40,8 @@ export const PersonalDataForm = () => {
 
    const learningModes = schemaForm._def.schema.shape.learningMode.options // Extract the enum values
    const technologyOptions = schemaForm._def.schema.shape.technologies.element.options // Extract the array values
+   const expTechnologies = schemaForm._def.schema.shape.experiences.element.shape.technology.options // Extract the enum values for exp tech
+   const expLevels = schemaForm._def.schema.shape.experiences.element.shape.level.options // Extract the enum values for exp lvl
 
    return userData ? (
       <SummaryDataForm userData={userData} />
@@ -81,7 +83,9 @@ export const PersonalDataForm = () => {
             <p>Załącz swoje CV (JPEG lub PNG):</p>
             <input type="file" id="cv" name="cv" accept="image/jpeg, image/png" {...register('cv')}></input>
             {errors?.cv && <p>{errors.cv.message}</p>}
+
             <p>Doświadczenie w programowaniu</p>
+
             <label htmlFor="experience">Czy posiadasz doświadczenie w programowaniu?</label>
             <input type="checkbox" id="experience" name="experience" {...register('experience')} />
             {watchExperience && (
@@ -91,19 +95,21 @@ export const PersonalDataForm = () => {
                      name="technologiesExperience"
                      {...register('technologiesExperience')}
                   >
-                     <option value="React">React</option>
-                     <option value="NodeJS">NodeJS</option>
-                     <option value="HTML">HTML</option>
-                     <option value="CSS">CSS</option>
-                     <option value="NextJS">NextJS</option>
+                     {expTechnologies.map(tech => (
+                        <option key={tech} value={tech}>
+                           {tech}
+                        </option>
+                     ))}
                   </select>
+
                   <select id="experienceLevel" name="experienceLevel" {...register('experienceLevel')}>
-                     <option value="1">1</option>
-                     <option value="2">2</option>
-                     <option value="3">3</option>
-                     <option value="4">4</option>
-                     <option value="5">5</option>
+                     {expLevels.map(level => (
+                        <option key={level} value={level}>
+                           {level}
+                        </option>
+                     ))}
                   </select>
+
                   <button
                      type="button"
                      id="addExperience"

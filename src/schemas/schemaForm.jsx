@@ -28,8 +28,8 @@ export const schemaForm = z
       experience: z.boolean(),
       experiences: z.array(
          z.object({
-            technology: z.string().min(1, 'Technologia jest wymagana'),
-            level: z.string().min(1, 'Poziom jest wymagany'),
+            technology: z.enum(['JavaScript', 'Python', 'C++', 'Inne']),
+            level: z.enum(['1', '2', '3', '4', '5']),
          }),
       ),
    })
