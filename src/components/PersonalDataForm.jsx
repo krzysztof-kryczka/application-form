@@ -1,6 +1,8 @@
 import { useForm, useFieldArray } from 'react-hook-form'
 import { useState } from 'react'
 import { SummaryDataForm } from './SummaryDataForm'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { schemaForm } from '../schemas/schemaForm'
 
 export const PersonalDataForm = () => {
    const {
@@ -10,6 +12,7 @@ export const PersonalDataForm = () => {
       control,
       formState: { errors },
    } = useForm({
+      resolver: zodResolver(schemaForm),
       defaultValues: {
          experiences: [],
       },
@@ -40,52 +43,13 @@ export const PersonalDataForm = () => {
       <>
          <form id="personalDataForm" onSubmit={handleSubmit(onSubmit)}>
             <p>Dane osobowe</p>
-            <input
-               type="text"
-               id="firstName"
-               name="firstName"
-               placeholder="Imię"
-               {...register('firstName', {
-                  required: 'Imię jest wymagane',
-                  minLength: { value: 3, message: 'Imię musi składać się co najmniej z 3 znaków' },
-               })}
-            />
+            <input type="text" id="firstName" name="firstName" placeholder="Imię" {...register('firstName')} />
             {errors?.firstName && <p>{errors.firstName.message}</p>}
-            <input
-               type="text"
-               id="lastName"
-               name="lastName"
-               placeholder="Nazwisko"
-               {...register('lastName', {
-                  required: 'Nazwisko jest wymagane',
-                  minLength: { value: 3, message: 'Nazwisko musi składać się co najmniej z 3 znaków' },
-               })}
-            />
+            <input type="text" id="lastName" name="lastName" placeholder="Nazwisko" {...register('lastName')} />
             {errors?.lastName && <p>{errors.lastName.message}</p>}
-            <input
-               type="email"
-               id="email"
-               name="email"
-               placeholder="E-mail"
-               {...register('email', {
-                  required: 'Email jest wymagany',
-                  pattern: {
-                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                     message: 'Niepoprawny adres email',
-                  },
-               })}
-            />
+            <input type="email" id="email" name="email" placeholder="E-mail" {...register('email')} />
             {errors?.email && <p>{errors.email.message}</p>}
-            <input
-               type="tel"
-               id="phone"
-               name="phone"
-               placeholder="Numer telefonu"
-               {...register('phone', {
-                  required: 'Telefon jest wymagany',
-                  minLength: { value: 9, message: 'Numer telefonu musi składać się z 9 cyfr' },
-               })}
-            />
+            <input type="tel" id="phone" name="phone" placeholder="Numer telefonu" {...register('phone')} />
             {errors?.phone && <p>{errors.phone.message}</p>}
             <p>Preferencje kursu</p>
             <label htmlFor="learningMode">Wybierz Formę nauki:</label>
@@ -93,13 +57,9 @@ export const PersonalDataForm = () => {
             <label htmlFor="offline">Stacjonarnie</label>
             <input type="radio" id="online" name="learningMode" value="online" {...register('learningMode')} />
             <label htmlFor="online">Online</label>
+            {errors?.learningMode && <p>{errors.learningMode.message}</p>}
             <label htmlFor="technologies">Preferowane technologie:</label>
-            <select
-               id="technologies"
-               name="technologies"
-               {...register('technologies', { required: 'Proszę wybrać co najmniej jedną technologię' })}
-               multiple
-            >
+            <select id="technologies" name="technologies" {...register('technologies')} multiple>
                <option value="React">React</option>
                <option value="NodeJS">NodeJS</option>
                <option value="HTML">HTML</option>
@@ -108,13 +68,7 @@ export const PersonalDataForm = () => {
             </select>
             {errors?.technologies && <p>{errors.technologies.message}</p>}
             <p>Załącz swoje CV (JPEG lub PNG):</p>
-            <input
-               type="file"
-               id="cv"
-               name="cv"
-               accept="image/jpeg, image/png"
-               {...register('cv', { required: 'Musisz dodać załącznik jako zdjęcie' })}
-            ></input>
+            <input type="file" id="cv" name="cv" accept="image/jpeg, image/png" {...register('cv')}></input>
             {errors?.cv && <p>{errors.cv.message}</p>}
             <p>Doświadczenie w programowaniu</p>
             <label htmlFor="experience">Czy posiadasz doświadczenie w programowaniu?</label>
@@ -152,7 +106,6 @@ export const PersonalDataForm = () => {
                   >
                      Dodaj Doświadczenie
                   </button>
-
                   <ul>
                      {exp.map((exp, index) => (
                         <li key={exp.id}>
@@ -163,9 +116,7 @@ export const PersonalDataForm = () => {
                         </li>
                      ))}
                   </ul>
-                  {errors.experiences === 0 && (
-                     <p>Gdy zaznaczono doświadczenie w programowaniu, lista doświadczeń nie może być pusta.</p>
-                  )}
+                  {errors?.experiences && <p>{errors.experiences.message}</p>}
                </div>
             )}
             <button type="submit">Wyślij zgłoszenie</button>
