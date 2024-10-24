@@ -1,10 +1,18 @@
 import React from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { SummaryDataForm } from './SummaryDataForm'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { schemaForm } from '../schemas/schemaForm'
-import { Error, Form, Input, Select, Option, Header, Label, ChkContainer, Button, ExpContainer } from '../ui'
+import { Error, Form, Input, Select, Option, Header, Label, ChkContainer, Button } from '../ui'
+import { ExtraExperience } from './ExtraExperience'
+
+// Extracted data
+const defaultValues = { experiences: [] }
+const learningModes = schemaForm._def.schema.shape.learningMode.options // Extract the enum values
+const technologyOptions = schemaForm._def.schema.shape.technologies.element.options // Extract the array values
+const expTechnologies = schemaForm._def.schema.shape.experiences.element.shape.technology.options // Extract the enum values for exp tech
+const expLevels = schemaForm._def.schema.shape.experiences.element.shape.level.options // Extract the enum values for exp lvl
 
 export const PersonalDataForm = () => {
    const {
@@ -15,40 +23,15 @@ export const PersonalDataForm = () => {
       formState: { errors },
    } = useForm({
       resolver: zodResolver(schemaForm),
-      defaultValues: {
-         experiences: [],
-      },
-   })
-
-   const {
-      fields: exp,
-      append,
-      remove,
-   } = useFieldArray({
-      control,
-      name: 'experiences',
+      defaultValues: defaultValues,
    })
 
    const [userData, setUserData] = useState(null)
-
    const watchExperience = watch('experience', false)
-   const [newExperience, setNewExperience] = useState({ technology: '', level: '' })
-   console.log('errors:', errors)
-
-   const handleAddExperience = () => {
-      append(newExperience)
-      setNewExperience({ technology: '', level: '' })
-   }
 
    const onSubmit = data => {
-      console.log(data)
       setUserData(data)
    }
-
-   const learningModes = schemaForm._def.schema.shape.learningMode.options // Extract the enum values
-   const technologyOptions = schemaForm._def.schema.shape.technologies.element.options // Extract the array values
-   const expTechnologies = schemaForm._def.schema.shape.experiences.element.shape.technology.options // Extract the enum values for exp tech
-   const expLevels = schemaForm._def.schema.shape.experiences.element.shape.level.options // Extract the enum values for exp lvl
 
    return userData ? (
       <SummaryDataForm userData={userData} />
@@ -94,46 +77,13 @@ export const PersonalDataForm = () => {
                <Label htmlFor="experience">Czy posiadasz doświadczenie w programowaniu?</Label>
             </ChkContainer>
             {watchExperience && (
-               <>
-                  <Button data-type="add" type="button" id="addExperience" onClick={handleAddExperience}>
-                     Dodaj Doświadczenie
-                  </Button>
-
-                  {exp.map((item, index) => (
-                     <ExpContainer key={item.id}>
-                        <Select
-                           id={`technologiesExperience${index}`}
-                           name={`experiences[${index}].technology`}
-                           {...register(`experiences.${index}.technology`)}
-                           defaultValue={item.technology || ''}
-                        >
-                           <Option value="">Wybierz technologię</Option>
-                           {expTechnologies.map(tech => (
-                              <Option key={tech} value={tech}>
-                                 {tech}
-                              </Option>
-                           ))}
-                        </Select>
-                        <Select
-                           id={`experienceLevel${index}`}
-                           name={`experiences[${index}].level`}
-                           {...register(`experiences.${index}.level`)}
-                           defaultValue={item.level || ''}
-                        >
-                           <Option value="">Wybierz poziom</Option>
-                           {expLevels.map(level => (
-                              <Option key={level} value={level}>
-                                 {level}
-                              </Option>
-                           ))}
-                        </Select>
-                        <Button data-type="remove" type="button" onClick={() => remove(index)}>
-                           Usuń
-                        </Button>
-                     </ExpContainer>
-                  ))}
-                  {errors?.experiences && <Error>{errors.experiences.message}</Error>}
-               </>
+               <ExtraExperience
+                  control={control}
+                  register={register}
+                  errors={errors}
+                  expTechnologies={expTechnologies}
+                  expLevels={expLevels}
+               />
             )}
             <Button data-type="send" type="submit">
                Wyślij zgłoszenie
