@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { SummaryDataForm } from './SummaryDataForm'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { schemaForm } from '../schemas/schemaForm'
+import { Error, Form, Input, Select, Option, Header, Label, ChkContainer, Button, ExpContainer } from '../ui'
 
 export const PersonalDataForm = () => {
    const {
@@ -53,84 +54,91 @@ export const PersonalDataForm = () => {
       <SummaryDataForm userData={userData} />
    ) : (
       <>
-         <form id="personalDataForm" onSubmit={handleSubmit(onSubmit)}>
-            <p>Dane osobowe</p>
-            <input type="text" id="firstName" name="firstName" placeholder="Imię" {...register('firstName')} />
-            {errors?.firstName && <p>{errors.firstName.message}</p>}
-            <input type="text" id="lastName" name="lastName" placeholder="Nazwisko" {...register('lastName')} />
-            {errors?.lastName && <p>{errors.lastName.message}</p>}
-            <input type="email" id="email" name="email" placeholder="E-mail" {...register('email')} />
-            {errors?.email && <p>{errors.email.message}</p>}
-            <input type="tel" id="phone" name="phone" placeholder="Numer telefonu" {...register('phone')} />
-            {errors?.phone && <p>{errors.phone.message}</p>}
-            <p>Preferencje kursu</p>
-            <label htmlFor="learningMode">Wybierz Formę nauki:</label>
-            {learningModes.map(mode => (
-               <React.Fragment key={mode}>
-                  <input type="radio" id={mode} name="learningMode" value={mode} {...register('learningMode')} />
-                  <label htmlFor={mode}>{mode === 'offline' ? 'Stacjonarna' : 'Online'}</label>
-               </React.Fragment>
-            ))}
-            {errors?.learningMode && <p>{errors.learningMode.message}</p>}
-            <label htmlFor="technologies">Preferowane technologie:</label>
-            <select id="technologies" name="technologies" {...register('technologies')} multiple>
-               {technologyOptions.map(tech => (
-                  <option key={tech} value={tech}>
-                     {tech}
-                  </option>
+         <Header data-type="h1">Formularz zgłoszeniowy na kurs programowania</Header>
+         <Form id="personalDataForm" onSubmit={handleSubmit(onSubmit)}>
+            <Header data-type="h2"> Dane osobowe</Header>
+            <Input type="text" id="firstName" name="firstName" placeholder="Imię" {...register('firstName')} />
+            {errors?.firstName && <Error>{errors.firstName.message}</Error>}
+            <Input type="text" id="lastName" name="lastName" placeholder="Nazwisko" {...register('lastName')} />
+            {errors?.lastName && <Error>{errors.lastName.message}</Error>}
+            <Input type="email" id="email" name="email" placeholder="E-mail" {...register('email')} />
+            {errors?.email && <Error>{errors.email.message}</Error>}
+            <Input type="tel" id="phone" name="phone" placeholder="Numer telefonu" {...register('phone')} />
+            {errors?.phone && <Error>{errors.phone.message}</Error>}
+            <Header data-type="h2">Preferencje kursu</Header>
+            <Label htmlFor="learningMode">Wybierz Formę nauki:</Label>
+            <ChkContainer>
+               {learningModes.map(mode => (
+                  <React.Fragment key={mode}>
+                     <Input type="radio" id={mode} name="learningMode" value={mode} {...register('learningMode')} />
+                     <Label htmlFor={mode}>{mode === 'offline' ? 'Stacjonarna' : 'Online'}</Label>
+                  </React.Fragment>
                ))}
-            </select>
-            {errors?.technologies && <p>{errors.technologies.message}</p>}
-            <p>Załącz swoje CV (JPEG lub PNG):</p>
-            <input type="file" id="cv" name="cv" accept="image/jpeg, image/png" {...register('cv')}></input>
-            {errors?.cv && <p>{errors.cv.message}</p>}
-            <p>Doświadczenie w programowaniu</p>
-            <label htmlFor="experience">Czy posiadasz doświadczenie w programowaniu?</label>
-            <input type="checkbox" id="experience" name="experience" {...register('experience')} />
+            </ChkContainer>
+            {errors?.learningMode && <Error>{errors.learningMode.message}</Error>}
+            <Label htmlFor="technologies">Preferowane technologie:</Label>
+            <Select id="technologies" name="technologies" {...register('technologies')} multiple>
+               {technologyOptions.map(tech => (
+                  <Option key={tech} value={tech}>
+                     {tech}
+                  </Option>
+               ))}
+            </Select>
+            {errors?.technologies && <Error>{errors.technologies.message}</Error>}
+            <Header data-type="h2">Załącz swoje CV (JPEG lub PNG):</Header>
+            <Input type="file" id="cv" name="cv" accept="image/jpeg, image/png" {...register('cv')}></Input>
+            {errors?.cv && <Error>{errors.cv.message}</Error>}
+            <Header data-type="h2">Doświadczenie w programowaniu</Header>
+            <ChkContainer>
+               <Input type="checkbox" id="experience" name="experience" {...register('experience')} />
+               <Label htmlFor="experience">Czy posiadasz doświadczenie w programowaniu?</Label>
+            </ChkContainer>
             {watchExperience && (
                <>
-                  <button type="button" id="addExperience" onClick={handleAddExperience}>
+                  <Button data-type="add" type="button" id="addExperience" onClick={handleAddExperience}>
                      Dodaj Doświadczenie
-                  </button>
+                  </Button>
 
                   {exp.map((item, index) => (
-                     <div key={item.id}>
-                        <select
+                     <ExpContainer key={item.id}>
+                        <Select
                            id={`technologiesExperience${index}`}
                            name={`experiences[${index}].technology`}
                            {...register(`experiences.${index}.technology`)}
                            defaultValue={item.technology || ''}
                         >
-                           <option value="">Wybierz technologię</option>
+                           <Option value="">Wybierz technologię</Option>
                            {expTechnologies.map(tech => (
-                              <option key={tech} value={tech}>
+                              <Option key={tech} value={tech}>
                                  {tech}
-                              </option>
+                              </Option>
                            ))}
-                        </select>
-                        <select
+                        </Select>
+                        <Select
                            id={`experienceLevel${index}`}
                            name={`experiences[${index}].level`}
                            {...register(`experiences.${index}.level`)}
                            defaultValue={item.level || ''}
                         >
-                           <option value="">Wybierz poziom</option>
+                           <Option value="">Wybierz poziom</Option>
                            {expLevels.map(level => (
-                              <option key={level} value={level}>
+                              <Option key={level} value={level}>
                                  {level}
-                              </option>
+                              </Option>
                            ))}
-                        </select>
-                        <button type="button" onClick={() => remove(index)}>
+                        </Select>
+                        <Button data-type="remove" type="button" onClick={() => remove(index)}>
                            Usuń
-                        </button>
-                     </div>
+                        </Button>
+                     </ExpContainer>
                   ))}
-                  {errors?.experiences && <p>{errors.experiences.message}</p>}
+                  {errors?.experiences && <Error>{errors.experiences.message}</Error>}
                </>
             )}
-            <button type="submit">Wyślij zgłoszenie</button>
-         </form>
+            <Button data-type="send" type="submit">
+               Wyślij zgłoszenie
+            </Button>
+         </Form>
       </>
    )
 }

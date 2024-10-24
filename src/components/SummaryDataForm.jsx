@@ -1,47 +1,47 @@
+import { Header, Paragraph, List, ListItem, SummaryContainer } from '../ui'
+
 export const SummaryDataForm = ({ userData }) => {
    const { firstName, lastName, email, phone, experiences, learningMode, technologies, cv } = userData
    return (
       <>
-         <h1>Dane z Formularza</h1>
-         <div>
+         <Header data-type="h1">Dane z Formularza</Header>
+         <SummaryContainer>
             <div>
-               <h2>Dane osobowe:</h2>
-               <p>Imię: {firstName}</p>
-               <p>Nazwisko: {lastName}</p>
-               <p>E-mail: {email}</p>
-               <p>Telefon: {phone}</p>
+               <Header data-type="h2">Dane osobowe:</Header>
+               <Paragraph>Imię: {firstName}</Paragraph>
+               <Paragraph>Nazwisko: {lastName}</Paragraph>
+               <Paragraph>E-mail: {email}</Paragraph>
+               <Paragraph>Telefon: {phone}</Paragraph>
             </div>
             <div>
-               <h2>Doświadczenie w programowaniu:</h2>
-               {experiences.length > 0 ? (
-                  <ul>
-                     {experiences.map(exp => {
-                        return (
-                           <li key={`${exp.technology}${exp.level}`}>
-                              Technologia: {exp.technology} / poziom: {exp.level}
-                           </li>
-                        )
-                     })}
-                  </ul>
-               ) : (
-                  <li>Brak doświadczenia</li>
-               )}
+               <Header data-type="h2">Doświadczenie w programowaniu:</Header>
+               <List>
+                  {experiences.length > 0 ? (
+                     experiences.map(exp => (
+                        <ListItem key={`${exp.technology}${exp.level}`}>
+                           Technologia: {exp.technology} / poziom: {exp.level}
+                        </ListItem>
+                     ))
+                  ) : (
+                     <ListItem>Brak doświadczenia</ListItem>
+                  )}
+               </List>
             </div>
             <div>
-               <h2>Preferencje kursu:</h2>
-               <p>Tryb kursu: {learningMode}</p>
-               <p>Preferowane technologie:</p>
-               <ul>
+               <Header data-type="h2">Preferencje kursu:</Header>
+               <Paragraph>Tryb kursu: {learningMode === 'offline' ? 'Stacjonarnie' : 'Online'}</Paragraph>
+               <Paragraph>Preferowane technologie:</Paragraph>
+               <List>
                   {technologies.map(tech => {
-                     return <li key={tech}>{tech}</li>
+                     return <ListItem key={tech}>{tech}</ListItem>
                   })}
-               </ul>
+               </List>
             </div>
             <div>
-               <h2>Curriculum vitae:</h2>
+               <Header data-type="h2">Curriculum vitae:</Header>
                <img src={URL.createObjectURL(cv[0])} alt="" width={300} />
             </div>
-         </div>
+         </SummaryContainer>
       </>
    )
 }
