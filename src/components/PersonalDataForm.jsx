@@ -31,7 +31,13 @@ export const PersonalDataForm = () => {
    const [userData, setUserData] = useState(null)
 
    const watchExperience = watch('experience', false)
+   const [newExperience, setNewExperience] = useState({ technology: '', level: '' })
    console.log('errors:', errors)
+
+   const handleAddExperience = () => {
+      append(newExperience)
+      setNewExperience({ technology: '', level: '' })
+   }
 
    const onSubmit = data => {
       console.log(data)
@@ -49,7 +55,6 @@ export const PersonalDataForm = () => {
       <>
          <form id="personalDataForm" onSubmit={handleSubmit(onSubmit)}>
             <p>Dane osobowe</p>
-
             <input type="text" id="firstName" name="firstName" placeholder="Imię" {...register('firstName')} />
             {errors?.firstName && <p>{errors.firstName.message}</p>}
             <input type="text" id="lastName" name="lastName" placeholder="Nazwisko" {...register('lastName')} />
@@ -58,9 +63,7 @@ export const PersonalDataForm = () => {
             {errors?.email && <p>{errors.email.message}</p>}
             <input type="tel" id="phone" name="phone" placeholder="Numer telefonu" {...register('phone')} />
             {errors?.phone && <p>{errors.phone.message}</p>}
-
             <p>Preferencje kursu</p>
-
             <label htmlFor="learningMode">Wybierz Formę nauki:</label>
             {learningModes.map(mode => (
                <React.Fragment key={mode}>
@@ -69,7 +72,6 @@ export const PersonalDataForm = () => {
                </React.Fragment>
             ))}
             {errors?.learningMode && <p>{errors.learningMode.message}</p>}
-
             <label htmlFor="technologies">Preferowane technologie:</label>
             <select id="technologies" name="technologies" {...register('technologies')} multiple>
                {technologyOptions.map(tech => (
@@ -79,62 +81,53 @@ export const PersonalDataForm = () => {
                ))}
             </select>
             {errors?.technologies && <p>{errors.technologies.message}</p>}
-
             <p>Załącz swoje CV (JPEG lub PNG):</p>
             <input type="file" id="cv" name="cv" accept="image/jpeg, image/png" {...register('cv')}></input>
             {errors?.cv && <p>{errors.cv.message}</p>}
-
             <p>Doświadczenie w programowaniu</p>
-
             <label htmlFor="experience">Czy posiadasz doświadczenie w programowaniu?</label>
             <input type="checkbox" id="experience" name="experience" {...register('experience')} />
             {watchExperience && (
-               <div id="experienceDetails">
-                  <select
-                     id="technologiesExperience"
-                     name="technologiesExperience"
-                     {...register('technologiesExperience')}
-                  >
-                     {expTechnologies.map(tech => (
-                        <option key={tech} value={tech}>
-                           {tech}
-                        </option>
-                     ))}
-                  </select>
-
-                  <select id="experienceLevel" name="experienceLevel" {...register('experienceLevel')}>
-                     {expLevels.map(level => (
-                        <option key={level} value={level}>
-                           {level}
-                        </option>
-                     ))}
-                  </select>
-
-                  <button
-                     type="button"
-                     id="addExperience"
-                     onClick={() => {
-                        const technology = watch('technologiesExperience')
-                        const level = watch('experienceLevel')
-                        if (technology && level) {
-                           append({ technology, level })
-                        }
-                     }}
-                  >
+               <>
+                  <button type="button" id="addExperience" onClick={handleAddExperience}>
                      Dodaj Doświadczenie
                   </button>
-                  <ul>
-                     {exp.map((exp, index) => (
-                        <li key={exp.id}>
-                           {exp.technology} - {exp.level}
-                           <button type="button" onClick={() => remove(index)}>
-                              Usuń
-                           </button>
-                        </li>
-                     ))}
-                  </ul>
+
+                  {exp.map((item, index) => (
+                     <div key={item.id}>
+                        <select
+                           id={`technologiesExperience${index}`}
+                           name={`experiences[${index}].technology`}
+                           {...register(`experiences.${index}.technology`)}
+                           defaultValue={item.technology || ''}
+                        >
+                           <option value="">Wybierz technologię</option>
+                           {expTechnologies.map(tech => (
+                              <option key={tech} value={tech}>
+                                 {tech}
+                              </option>
+                           ))}
+                        </select>
+                        <select
+                           id={`experienceLevel${index}`}
+                           name={`experiences[${index}].level`}
+                           {...register(`experiences.${index}.level`)}
+                           defaultValue={item.level || ''}
+                        >
+                           <option value="">Wybierz poziom</option>
+                           {expLevels.map(level => (
+                              <option key={level} value={level}>
+                                 {level}
+                              </option>
+                           ))}
+                        </select>
+                        <button type="button" onClick={() => remove(index)}>
+                           Usuń
+                        </button>
+                     </div>
+                  ))}
                   {errors?.experiences && <p>{errors.experiences.message}</p>}
-               </div>
+               </>
             )}
             <button type="submit">Wyślij zgłoszenie</button>
          </form>
