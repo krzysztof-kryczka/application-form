@@ -15,6 +15,8 @@ const expTechnologies = schemaForm._def.schema.shape.experiences.element.shape.t
 const expLevels = schemaForm._def.schema.shape.experiences.element.shape.level.options // Extract the enum values for exp lvl
 
 export const PersonalDataForm = () => {
+   const [userData, setUserData] = useState(null)
+
    const {
       register,
       handleSubmit,
@@ -26,7 +28,6 @@ export const PersonalDataForm = () => {
       defaultValues: defaultValues,
    })
 
-   const [userData, setUserData] = useState(null)
    const watchExperience = watch('experience', false)
 
    const onSubmit = data => {
@@ -37,9 +38,9 @@ export const PersonalDataForm = () => {
       <SummaryDataForm userData={userData} />
    ) : (
       <>
-         <Header data-type="h1">Formularz zgłoszeniowy na kurs programowania</Header>
+         <Header variant="h1">Formularz zgłoszeniowy na kurs programowania</Header>
          <Form id="personalDataForm" onSubmit={handleSubmit(onSubmit)}>
-            <Header data-type="h2"> Dane osobowe</Header>
+            <Header variant="h2">Dane osobowe</Header>
             <Input type="text" id="firstName" name="firstName" placeholder="Imię" {...register('firstName')} />
             {errors?.firstName && <Error>{errors.firstName.message}</Error>}
             <Input type="text" id="lastName" name="lastName" placeholder="Nazwisko" {...register('lastName')} />
@@ -48,7 +49,7 @@ export const PersonalDataForm = () => {
             {errors?.email && <Error>{errors.email.message}</Error>}
             <Input type="tel" id="phone" name="phone" placeholder="Numer telefonu" {...register('phone')} />
             {errors?.phone && <Error>{errors.phone.message}</Error>}
-            <Header data-type="h2">Preferencje kursu</Header>
+            <Header variant="h2">Preferencje kursu</Header>
             <Label htmlFor="learningMode">Wybierz Formę nauki:</Label>
             <ChkContainer>
                {learningModes.map(mode => (
@@ -68,10 +69,10 @@ export const PersonalDataForm = () => {
                ))}
             </Select>
             {errors?.technologies && <Error>{errors.technologies.message}</Error>}
-            <Header data-type="h2">Załącz swoje CV (JPEG lub PNG):</Header>
+            <Header variant="h2">Załącz swoje CV (JPEG lub PNG):</Header>
             <Input type="file" id="cv" name="cv" accept="image/jpeg, image/png" {...register('cv')}></Input>
             {errors?.cv && <Error>{errors.cv.message}</Error>}
-            <Header data-type="h2">Doświadczenie w programowaniu</Header>
+            <Header variant="h2">Doświadczenie w programowaniu</Header>
             <ChkContainer>
                <Input type="checkbox" id="experience" name="experience" {...register('experience')} />
                <Label htmlFor="experience">Czy posiadasz doświadczenie w programowaniu?</Label>
@@ -85,7 +86,7 @@ export const PersonalDataForm = () => {
                   expLevels={expLevels}
                />
             )}
-            <Button data-type="send" type="submit">
+            <Button variant="send" type="submit">
                Wyślij zgłoszenie
             </Button>
          </Form>

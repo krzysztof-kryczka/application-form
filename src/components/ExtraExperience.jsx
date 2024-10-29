@@ -1,19 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useFieldArray } from 'react-hook-form'
 import { ExpContainer, Select, Option, Button, Error } from '../ui'
 
 export const ExtraExperience = ({ control, register, errors, expTechnologies, expLevels }) => {
    const { fields: exp, append, remove } = useFieldArray({ control, name: 'experiences' })
-   const [newExperience, setNewExperience] = useState({ technology: '', level: '' })
 
    const handleAddExperience = () => {
-      append(newExperience)
-      setNewExperience({ technology: '', level: '' })
+      append({ technology: '', level: '' })
    }
 
    return (
       <>
-         <Button data-type="add" type="button" id="addExperience" onClick={handleAddExperience}>
+         <Button variant="add" type="button" id="addExperience" onClick={handleAddExperience}>
             Dodaj Doświadczenie
          </Button>
          {exp.map((item, index) => (
@@ -44,7 +42,7 @@ export const ExtraExperience = ({ control, register, errors, expTechnologies, ex
                      </Option>
                   ))}
                </Select>
-               <Button data-type="remove" type="button" onClick={() => remove(index)}>
+               <Button variant="remove" type="button" onClick={() => remove(index)}>
                   Usuń
                </Button>
             </ExpContainer>

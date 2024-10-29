@@ -4,17 +4,17 @@ export const SummaryDataForm = ({ userData }) => {
    const { firstName, lastName, email, phone, experiences, learningMode, technologies, cv } = userData
    return (
       <>
-         <Header data-type="h1">Dane z Formularza</Header>
+         <Header variant="h1">Dane z Formularza</Header>
          <SummaryContainer>
             <div>
-               <Header data-type="h2">Dane osobowe:</Header>
+               <Header variant="h2">Dane osobowe:</Header>
                <Paragraph>Imię: {firstName}</Paragraph>
                <Paragraph>Nazwisko: {lastName}</Paragraph>
                <Paragraph>E-mail: {email}</Paragraph>
                <Paragraph>Telefon: {phone}</Paragraph>
             </div>
             <div>
-               <Header data-type="h2">Doświadczenie w programowaniu:</Header>
+               <Header variant="h2">Doświadczenie w programowaniu:</Header>
                <List>
                   {experiences.length > 0 ? (
                      experiences.map(exp => (
@@ -28,7 +28,7 @@ export const SummaryDataForm = ({ userData }) => {
                </List>
             </div>
             <div>
-               <Header data-type="h2">Preferencje kursu:</Header>
+               <Header variant="h2">Preferencje kursu:</Header>
                <Paragraph>Tryb kursu: {learningMode === 'offline' ? 'Stacjonarnie' : 'Online'}</Paragraph>
                <Paragraph>Preferowane technologie:</Paragraph>
                <List>
@@ -38,7 +38,7 @@ export const SummaryDataForm = ({ userData }) => {
                </List>
             </div>
             <div>
-               <Header data-type="h2">Curriculum vitae:</Header>
+               <Header variant="h2">Curriculum vitae:</Header>
                <img src={URL.createObjectURL(cv[0])} alt="" width={300} />
             </div>
          </SummaryContainer>

@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components'
 
-export const Button = styled.button`
+const StyledButton = ({ variant, ...props }) => <button {...props} />
+
+export const Button = styled(StyledButton)`
    margin: 0.5rem 0;
    padding: 0.5rem;
    border-radius: 5px;
@@ -15,8 +17,8 @@ export const Button = styled.button`
       background-color: #3700b3;
    }
 
-   ${props =>
-      props['data-type'] === 'send' &&
+   ${({ variant }) =>
+      variant === 'send' &&
       css`
          background-color: #6200ea;
          &:hover {
@@ -24,8 +26,8 @@ export const Button = styled.button`
          }
       `}
 
-   ${props =>
-      props['data-type'] === 'add' &&
+   ${({ variant }) =>
+      variant === 'add' &&
       css`
          background-color: #28a745;
          &:hover {
@@ -33,8 +35,8 @@ export const Button = styled.button`
          }
       `}
 
-   ${props =>
-      props['data-type'] === 'remove' &&
+  ${({ variant }) =>
+      variant === 'remove' &&
       css`
          background-color: #dc3545;
          &:hover {

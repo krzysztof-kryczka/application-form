@@ -6,6 +6,8 @@ export const Select = styled.select`
    padding: 0.5rem;
    border-radius: 5px;
    border: 1px solid #ddd;
+   height: 100%;
+   overflow: auto;
 `
 
 export const Option = styled.option`
