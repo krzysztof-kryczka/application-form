@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const Select = styled.select`
    background-color: #364050;
    margin: 0.5rem 0;
-   padding: 0.5rem;
+   padding: 0.2rem;
    border-radius: 5px;
    border: 1px solid #ddd;
    height: 100%;
@@ -11,7 +11,7 @@ export const Select = styled.select`
 `
 
 export const Option = styled.option`
-   padding: 0.5rem;
+   padding: 0.2rem;
    background-color: #364050;
    color: #000;
 

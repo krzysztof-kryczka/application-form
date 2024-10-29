@@ -11,8 +11,7 @@ const BaseHeader = ({ variant, ...props }) => {
 }
 
 export const Header = styled(BaseHeader)`
-   font-size: 3rem;
-   margin-bottom: 1rem;
+   font-size: 1.8rem;
    color: green;
    text-align: center;
 

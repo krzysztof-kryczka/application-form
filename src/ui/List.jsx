@@ -7,4 +7,5 @@ export const List = styled.ul`
 
 export const ListItem = styled.li`
    text-align: left;
+   padding: 0.2rem;
 `
